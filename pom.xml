@@ -11,8 +11,8 @@
     <groupId>com.ensas</groupId>
     <artifactId>shoppy-backend-spring</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>shoppy-backend-spring</name>
-    <description>shoppy-backend-spring</description>
+    <name>Shoppy-Backend-SpringBoot</name>
+    <description>Shoppy-Backend-SpringBoot</description>
     <properties>
         <java.version>1.8</java.version>
         <org.mapstruct.version>1.5.2.Final</org.mapstruct.version>

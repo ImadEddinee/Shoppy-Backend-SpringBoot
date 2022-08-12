@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 @Data @NoArgsConstructor @AllArgsConstructor
-public class ProductDto {
+public class ProductDto { //TODO use builder
 
     private Long id;
     private String sku;

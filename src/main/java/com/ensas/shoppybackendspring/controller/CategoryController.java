@@ -1,16 +1,14 @@
 package com.ensas.shoppybackendspring.controller;
 
 import com.ensas.shoppybackendspring.dtos.CategoryDto;
-import com.ensas.shoppybackendspring.repositories.CategoryRepository;
-import com.ensas.shoppybackendspring.services.CategoryService;
+import com.ensas.shoppybackendspring.dtos.ProductDto;
+import com.ensas.shoppybackendspring.services.imp.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,8 +19,21 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping
+    @GetMapping // TODO use Page instead
     public ResponseEntity<List<CategoryDto>> getAllCategories(){
         return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
+    @GetMapping("/{id}/products")
+    public ResponseEntity<List<ProductDto>> getProductsByCategory(
+            @PathVariable("id") Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size){
+        return new ResponseEntity<>(categoryService.getProductsByCategory(id,page,size), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public String getAllProducts(@Valid @RequestBody  CategoryDto categoryDto ){
+        return categoryDto.toString();
+    }
+
 }

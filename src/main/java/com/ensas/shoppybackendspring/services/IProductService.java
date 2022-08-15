@@ -5,5 +5,10 @@ import com.ensas.shoppybackendspring.dtos.ProductDto;
 import java.util.List;
 
 public interface IProductService {
-    List<ProductDto> getAllProducts();
+
+    List<ProductDto> getProductByKeyword(String keyword, int page, int size);
+
+    List<ProductDto> getRandomProducts(int page, int size);
+
+    ProductDto getProduct(Long id);
 }

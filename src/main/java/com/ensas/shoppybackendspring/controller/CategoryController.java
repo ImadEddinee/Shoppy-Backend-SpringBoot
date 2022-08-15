@@ -30,10 +30,13 @@ public class CategoryController {
             @RequestParam(name = "size", defaultValue = "5") int size){
         return new ResponseEntity<>(categoryService.getProductsByCategory(id,page,size), HttpStatus.OK);
     }
-
-    @PostMapping
-    public String getAllProducts(@Valid @RequestBody  CategoryDto categoryDto ){
-        return categoryDto.toString();
+    @GetMapping("/{id}/products/search")
+    public ResponseEntity<List<ProductDto>> searchInProductsByCategory(
+            @PathVariable("id") Long id,
+            @RequestParam(name = "keyword", defaultValue = "") String keyword,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size){
+            List<ProductDto> products = categoryService.getByCategory(id,keyword,page,size);
+            return new ResponseEntity<>(products, HttpStatus.OK);
     }
-
 }

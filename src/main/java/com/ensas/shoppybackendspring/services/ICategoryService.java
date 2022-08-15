@@ -8,4 +8,6 @@ import java.util.List;
 public interface ICategoryService {
     List<CategoryDto> getAllCategories();
     List<ProductDto> getProductsByCategory(Long id,int page,int size);
+
+    List<ProductDto> getByCategory(Long id, String keyword, int page, int size);
 }

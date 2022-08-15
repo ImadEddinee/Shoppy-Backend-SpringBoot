@@ -10,6 +10,7 @@ import com.ensas.shoppybackendspring.repositories.CategoryRepository;
 import com.ensas.shoppybackendspring.repositories.ProductRepository;
 import com.ensas.shoppybackendspring.services.ICategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,17 @@ public class CategoryService implements ICategoryService {
                 .findByCategoryId(id, PageRequest.of(page, size))
                 .getContent();
         return products.stream()
+                .map(productMapper::productToProductDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductDto> getByCategory(Long id, String keyword, int page, int size) {
+        keyword = "%" + keyword + "%";
+        categoryRepository.findById(id).orElseThrow(() ->
+                new CategoryNotFoundException("Category with id: " + id + " does not exists"));
+        Page<Product> productPage = productRepository.searchByNameInCategoryId(keyword, id, PageRequest.of(page, size));
+        return productPage.getContent().stream()
                 .map(productMapper::productToProductDto)
                 .collect(Collectors.toList());
     }

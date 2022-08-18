@@ -25,6 +25,7 @@ public class CategoryService implements ICategoryService {
     private final ProductRepository productRepository;
     private final CategoryMapper categoryMapper;
     private final ProductMapper productMapper;
+    private final ProductService productService;
 
 
 
@@ -40,12 +41,9 @@ public class CategoryService implements ICategoryService {
         // Check if Category exists
         categoryRepository.findById(id).orElseThrow(()->
                 new CategoryNotFoundException("Category with id: "+id+" does not exists"));
-        List<Product> products = productRepository
-                .findByCategoryId(id, PageRequest.of(page, size))
-                .getContent();
-        return products.stream()
-                .map(productMapper::productToProductDto)
-                .collect(Collectors.toList());
+        Page<Product> productsPage = productRepository
+                .findByCategoryId(id, PageRequest.of(page, size));
+        return productService.pageToList(productsPage, page, size);
     }
 
     @Override
@@ -53,10 +51,8 @@ public class CategoryService implements ICategoryService {
         keyword = "%" + keyword + "%";
         categoryRepository.findById(id).orElseThrow(() ->
                 new CategoryNotFoundException("Category with id: " + id + " does not exists"));
-        Page<Product> productPage = productRepository.searchByNameInCategoryId(keyword, id, PageRequest.of(page, size));
-        return productPage.getContent().stream()
-                .map(productMapper::productToProductDto)
-                .collect(Collectors.toList());
+        Page<Product> productsPage = productRepository.searchByNameInCategoryId(keyword, id, PageRequest.of(page, size));
+        return productService.pageToList(productsPage, page, size);
     }
 
 }

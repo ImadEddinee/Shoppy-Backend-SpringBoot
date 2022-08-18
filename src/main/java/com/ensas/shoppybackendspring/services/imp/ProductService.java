@@ -24,20 +24,15 @@ public class ProductService implements IProductService {
     @Override
     public List<ProductDto> getProductByKeyword(String keyword, int page, int size) {
         keyword = "%" + keyword + "%";
-        List<Product> products = productRepository
-                .searchInRandomProducts(keyword, PageRequest.of(page, size))
-                .getContent();
-        return products.stream()
-                .map(productMapper::productToProductDto)
-                .collect(Collectors.toList());
+        Page<Product> productsPage = productRepository
+                .searchInRandomProducts(keyword, PageRequest.of(page, size));
+        return pageToList(productsPage,page,size);
     }
 
     @Override
     public List<ProductDto> getRandomProducts(int page, int size) {
-        Page<Product> products = productRepository.getRandomProducts(PageRequest.of(page, size));
-        return products.getContent().stream()
-                .map(productMapper::productToProductDto)
-                .collect(Collectors.toList()); // TODO case sensitive search
+        Page<Product> productsPage = productRepository.getRandomProducts(PageRequest.of(page, size));
+        return pageToList(productsPage,page,size);
     }
 
     @Override
@@ -45,5 +40,18 @@ public class ProductService implements IProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("there is no product with id = " + id));
         return productMapper.productToProductDto(product);
+    }
+    @Override
+    public List<ProductDto> pageToList(Page<Product> productPage, int page, int size){
+        List<ProductDto> productDtos = productPage.getContent().stream()
+                .map(productMapper::productToProductDto)
+                .collect(Collectors.toList());
+        productDtos.forEach(productDto -> {
+            productDto.setCurrentPage(page);
+            productDto.setPageSize(size);
+            productDto.setTotalPages(productPage.getTotalPages());
+            productDto.setTotalElements(productPage.getTotalElements());
+        });
+        return productDtos;
     }
 }

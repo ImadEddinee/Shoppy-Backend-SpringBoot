@@ -16,4 +16,8 @@ public class ProductDto { //TODO use builder
     private String imageUrl;
     private boolean active;
     private int unitsInStock;
+    private int currentPage;
+    private int pageSize;
+    private int totalPages;
+    private Long totalElements;
 }

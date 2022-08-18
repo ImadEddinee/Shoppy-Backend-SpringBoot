@@ -12,7 +12,7 @@ public class CategoryDto {
 
     private Long id;
 
-    @NotBlank ( message
+    @NotBlank ( message // TODO add validators
             = "About Me must be between 10 and 200 characters")
     private String name;
 }

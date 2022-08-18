@@ -1,6 +1,7 @@
 package com.ensas.shoppybackendspring.exceptions.exception;
 
 import com.ensas.shoppybackendspring.exceptions.CategoryNotFoundException;
+import com.ensas.shoppybackendspring.exceptions.CountryNotFoundException;
 import com.ensas.shoppybackendspring.exceptions.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,15 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(value = CategoryNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleCategoryException(CategoryNotFoundException e){
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                e.getMessage(),new Date(),badRequest
+        );
+        return new ResponseEntity<>(exceptionResponse, badRequest);
+    }
+
+    @ExceptionHandler(value = CountryNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleCategoryException(CountryNotFoundException e){
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 e.getMessage(),new Date(),badRequest
